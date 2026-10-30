@@ -10,8 +10,10 @@
   --shadow: 0 8px 30px rgba(60, 70, 60, 0.08);
 }
 
+/* Tema oscuro: automático según el sistema, o elegido con el botón (data-theme) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
+    color-scheme: dark;
     --bg: #161b19;
     --surface: #1f2723;
     --text: #e8ece9;
@@ -22,6 +24,62 @@
     --line: #2d3732;
     --shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #161b19;
+  --surface: #1f2723;
+  --text: #e8ece9;
+  --muted: #a3b0a9;
+  --accent: #8fb4a0;
+  --accent-soft: #2a3831;
+  --lavender: #4a4566;
+  --line: #2d3732;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Botón de tema (fijo arriba a la derecha, también en móvil) */
+.theme-toggle {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.25s ease, background-color 0.4s, border-color 0.4s;
+}
+
+.theme-toggle:hover { transform: rotate(15deg) scale(1.06); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.theme-toggle svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Muestra la luna en tema claro y el sol en tema oscuro */
+.theme-toggle .sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .moon { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .theme-toggle .sun { display: block; }
+  :root:not([data-theme]) .theme-toggle .moon { display: none; }
 }
 
 * { box-sizing: border-box; }
@@ -35,6 +93,7 @@ body {
   color: var(--text);
   font-family: "Inter", system-ui, sans-serif;
   line-height: 1.7;
+  transition: background-color 0.4s, color 0.4s;
 }
 
 h1, h2, h3 {

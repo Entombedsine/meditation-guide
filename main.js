@@ -1,3 +1,14 @@
+// Cambio de tema claro/oscuro. La elección se recuerda en este navegador.
+document.querySelector(".theme-toggle").addEventListener("click", () => {
+  const root = document.documentElement;
+  const isDark = root.dataset.theme
+    ? root.dataset.theme === "dark"
+    : matchMedia("(prefers-color-scheme: dark)").matches;
+  const next = isDark ? "light" : "dark";
+  root.dataset.theme = next;
+  try { localStorage.setItem("theme", next); } catch (e) {}
+});
+
 // Aparición suave al hacer scroll. Sin JavaScript (o sin IntersectionObserver) todo se ve normal.
 if ("IntersectionObserver" in window) {
   const items = document.querySelectorAll(".narrow > *, .steps li, section h2, .card");
