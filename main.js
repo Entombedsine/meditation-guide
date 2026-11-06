@@ -9,6 +9,23 @@ document.querySelector(".theme-toggle").addEventListener("click", () => {
   try { localStorage.setItem("theme", next); } catch (e) {}
 });
 
+// Pantallas: #aprender (por defecto) y #mudras. Sin JavaScript solo se ve la primera.
+const screens = document.querySelectorAll(".screen");
+const tabs = document.querySelectorAll(".tabs a");
+
+function showScreen() {
+  const name = location.hash === "#mudras" ? "mudras" : "aprender";
+  screens.forEach((s) => { s.hidden = s.id !== `screen-${name}`; });
+  tabs.forEach((t) => {
+    if (t.dataset.screen === name) t.setAttribute("aria-current", "page");
+    else t.removeAttribute("aria-current");
+  });
+  window.scrollTo(0, 0);
+}
+
+window.addEventListener("hashchange", showScreen);
+showScreen();
+
 // Aparición suave al hacer scroll. Sin JavaScript (o sin IntersectionObserver) todo se ve normal.
 if ("IntersectionObserver" in window) {
   const items = document.querySelectorAll(".narrow > *, .steps li, section h2, .card");
